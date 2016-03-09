@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * Implement hook_menu()
+ */
+function my_database_menu()
+{
+
+    $items = array();
+
+
+    // form page
+    $items['my_database'] = array(
+        'title'            => 'MY DB FORM',
+        'page callback'    => 'drupal_get_form',
+        'page arguments'   => array('my_database_form'),
+        'access arguments' => array('administer site configuration'),
+        'file' => 'mydb.pages.inc',
+        'menu_name' => 'main-menu',
+        'options' => array('attributes' => array('class' => array('my_db_class'))),
+    );
+
+    $items['my_database/main-tab'] = array(
+        'title' => 'db_insert',
+        'page callback' => 'drupal_get_form',
+        'access callback' => TRUE,
+        'menu_name' => 'main-menu',
+        'type' => MENU_DEFAULT_LOCAL_TASK,
+    );
+
+    $items['my_database/list'] = array(
+        'title' => 'db_select',
+        'page callback' => 'my_database_table_data_page',
+        'access arguments' => array('administer site configuration'),
+        'menu_name' => 'main-menu',
+        'file' => 'mydb.pages.inc',
+        'type' => MENU_LOCAL_TASK,
+    );
+
+    $items['my_database/%/delete'] = array(
+        'title callback' => 'my_database_delete_page_title',
+        'title arguments' => array(1),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('my_database_delete_form', 1),
+        'access arguments' => array('administer site configuration'),
+        'file' => 'mydb.pages.inc',
+    );
+
+	  $items['first-popup/%ctools_js'] = array(
+	      'title' => 'My first popup',
+	      'page arguments' => array(1),
+	      'access callback' => TRUE,
+	      'page callback' => 'my_popup_callback',
+          'file' => 'modal.pages.inc',
+	      'type' => MENU_CALLBACK,
+	  );
+
+	  $items['my_database/first-popup'] = array(
+	      'title' => 'Popup',
+	      'access callback' => TRUE,
+	      'page callback' => 'my_popup_page',
+          'file' => 'modal.pages.inc',
+          'type' => MENU_LOCAL_TASK,
+	  );
+
+
+    return $items;
+}
+
+
+drupal_add_css(drupal_get_path('module', 'my_database') .'/css/my_database.css');
+

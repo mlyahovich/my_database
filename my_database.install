@@ -1,0 +1,40 @@
+<?php
+function my_database_uninstall()
+{
+	cache_clear_all('my_database', 'cache', TRUE);
+	drupal_uninstall_schema('custom_table');
+	menu_rebuild();
+}
+
+function my_database_schema()
+{
+	$schema['custom_table'] = array(
+		'fields'      => array(
+			'id'         => array('type' => 'serial',  'size'=>'normal',  'not null' => TRUE),
+			'number'	 => array('type' => 'int', 'not null' => TRUE),
+			'teaser'     => array('type' => 'varchar','length' => 150,'not null' => TRUE, 'default' => ''),
+			'text'        => array('type' => 'text','size' => 'big','not null' => TRUE)
+		),
+		'primary key' => array('id')
+	);
+
+	return $schema;
+}
+
+/**
+ * Implement hook_install()
+ */
+function my_database_install () {
+
+	$menu = array(
+		'menu_name' => 'test-menu',
+		'title' => 'Test menu',
+		'description' => 'A test menu'
+	);
+
+    menu_save($menu);
+    cache_clear_all('*', 'cache_menu', TRUE);
+
+    drupal_set_message($message = t('The module was successfully installed. '), $type = 'status');
+
+}
